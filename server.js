@@ -1,25 +1,20 @@
-import dotenv from 'dotenv';
-dotenv.config()
 import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import connectDB from './config/db.config.js';
+import taskRoutes from './routes/task.route.js';
 
-import route from './Routes/Product.route.js';
-import Dbconnection from './Config/db.config.js';
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT ||8081
-  
-//connections
-Dbconnection();
-//middleware
+const PORT = process.env.PORT || 5000;
+
+connectDB();
+
+app.use(cors());
 app.use(express.json());
 
-
-// SERVER RESPONSE
-app.get('/', (req, res) => {
-  res.send('Hey! Buddy, This Product CRUD SERVER.')
-})
-
-app.use('/', route);
+app.use('/api', taskRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
